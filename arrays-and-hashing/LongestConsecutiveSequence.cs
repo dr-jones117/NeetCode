@@ -2,22 +2,17 @@ using System.Diagnostics;
 
 int LongestConsecutive(int[] nums)
 {
-    var numIdxDict = new Dictionary<int, int>();
+    var numIdxDict = new HashSet<int>(nums);
     var maxSequence = 0;
-
-    for(int i = 0; i < nums.Length; i++)
-    {
-        numIdxDict[nums[i]] = i; 
-    }
 
     for(int i = 0; i < nums.Length; i++)
     {
         var currNum = nums[i];
         var count = 1;
-        while(numIdxDict.TryGetValue(currNum - 1, out int idx))
+        while(numIdxDict.Contains(currNum - 1))
         {
             count++;
-            currNum = nums[idx];
+            currNum = currNum - 1;
         }
         maxSequence = Math.Max(maxSequence, count);
     }
