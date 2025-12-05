@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System;
 
 var head = new Node(1);
 var two = new Node(2);
@@ -39,33 +38,21 @@ public class Node {
 public class Solution {
     public Node CloneGraph(Node node)
     {
-        if(node == null) return null;
-
         var visited = new Dictionary<int, Node>();
-        var copiedNode = new Node(node.val);
-        visited[node.val] = copiedNode;
-        foreach(var neighbor in node.neighbors)
-        {
-            copiedNode.neighbors.Add(DFS(neighbor, ref visited));
-        }
 
-        return copiedNode;
+        return DFS(node, ref visited);
     }
 
     private Node DFS(Node node, ref Dictionary<int, Node> visited)
     {
-        if(visited.ContainsKey(node.val))
-        {
-            return visited[node.val];
-        }
+        if(node == null) return null;
+        if(visited.ContainsKey(node.val)) return visited[node.val];
 
         var currNode = new Node(node.val);
         visited[node.val] = currNode;
 
         foreach(var neighbor in node.neighbors)
-        {
             currNode.neighbors.Add(DFS(neighbor, ref visited));
-        }
 
         return currNode;
     }
