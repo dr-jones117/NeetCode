@@ -75,4 +75,36 @@ public class Solution {
 
         return res;
     }
+
+    public int MaxPathSumPostOrderIterative(TreeNode root) {
+        var stack = new Stack<TreeNode>();
+        var map = new Dictionary<TreeNode, int>();
+        var res = Int32.MinValue;
+        TreeNode lastVisited = null;
+        TreeNode curr = root;
+
+        while (curr != null || stack.Count > 0) {
+            if (curr != null) {
+                stack.Push(curr);
+                curr = curr.left;
+            } else {
+                var peekNode = stack.Peek();
+                if (peekNode.right != null && lastVisited != peekNode.right) {
+                    curr = peekNode.right;
+                } else {
+                    var node = stack.Pop();
+                    
+                    int leftMax = (node.left != null && map.ContainsKey(node.left)) ? Math.Max(map[node.left], 0) : 0;
+                    int rightMax = (node.right != null && map.ContainsKey(node.right)) ? Math.Max(map[node.right], 0) : 0;
+
+                    res = Math.Max(res, node.val + leftMax + rightMax);
+
+                    map[node] = node.val + Math.Max(leftMax, rightMax);
+
+                    lastVisited = node;
+                }
+            }
+        }
+        return res;
+    }
 }
