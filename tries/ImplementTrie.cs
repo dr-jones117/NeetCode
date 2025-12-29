@@ -12,6 +12,7 @@ public class PrefixTree
 {
     private class TrieNode
     {
+        // since this will only have alphabetical characters. could've just done a char[26] here
         public Dictionary<char, TrieNode> children;
         public bool isWordEnding;
         public TrieNode()
