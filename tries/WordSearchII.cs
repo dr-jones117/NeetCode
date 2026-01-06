@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 var sol = new Solution();
 
 var res = sol.FindWords(new char[][] {
@@ -11,30 +13,49 @@ public class Solution {
     private class TrieNode
     {
         public TrieNode[] children;
-        public bool isWord;
+        public string word;
 
         public TrieNode()
         {
             children = new TrieNode[26];
-            isWord = false;
+            word = null;
         }
     }
 
     private void AddWord(TrieNode root, string word)
     {
-        if(root == null) return;
-
         var currNode = root;
         foreach(var c in word)
         {
             var idx = (int)c - 97;
             if(currNode.children[idx] == null)
-            {
                 currNode.children[idx] = new TrieNode();
-            }
+
             currNode = currNode.children[idx];
         }
-        currNode.isWord = true;        
+        currNode.word = word;      
+    }
+
+    private void Dfs(int row, int col, TrieNode node, char[][] board, List<string> res)
+    {
+        char c = board[row][col];
+        if (c == '#' || node.children[c - 97] == null) return;
+
+        node = node.children[c - 97];
+        if (node.word != null)
+        {
+            res.Add(node.word);
+            node.word = null;
+        }
+
+        board[row][col] = '#';
+
+        if (row > 0) Dfs(row - 1, col, node, board, res);
+        if (col > 0) Dfs(row, col - 1, node, board, res);
+        if (row < board.Length - 1) Dfs(row + 1, col, node, board, res);
+        if (col < board[0].Length - 1) Dfs(row, col + 1, node, board, res);
+
+        board[row][col] = c;
     }
 
     public List<string> FindWords(char[][] board, string[] words) {
@@ -43,15 +64,14 @@ public class Solution {
             AddWord(trieRoot, word);
 
         var res = new List<string>();
+        int rows = board.Length;
+        int cols = board[0].Length;
 
-        // make the words into a trie.
-        // for each col and row combo. 
-        // do a depth first search and use the trie to see if we have a match
-        
-        // how fast?
-        // id assume
-        // word_amount * max_word_length + board_length * board_width * dfs
-
+        for(int row = 0; row < rows; row++)
+        {
+            for(int col = 0; col < cols; col++)
+                Dfs(row, col, trieRoot, board, res);
+        }
 
         return res;
     }
