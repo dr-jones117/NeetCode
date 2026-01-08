@@ -9,6 +9,7 @@ Debug.Assert(sol.LeastInterval(['A', 'A', 'A', 'B', 'C'], 3) == 9);
 public class Solution {
     public int LeastInterval(char[] tasks, int n)
     {
+        // next time i solve this. go for big oh of n
         var lastSeen = new Dictionary<char, int>();
         var taskHeap = new PriorityQueue<char, int>();
 
