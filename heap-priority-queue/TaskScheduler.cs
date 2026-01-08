@@ -10,6 +10,7 @@ public class Solution {
     public int LeastInterval(char[] tasks, int n)
     {
         // next time i solve this. go for big oh of n
+        // make a max heap based on the amount of occurences of a task
         var lastSeen = new Dictionary<char, int>();
         var taskHeap = new PriorityQueue<char, int>();
 
