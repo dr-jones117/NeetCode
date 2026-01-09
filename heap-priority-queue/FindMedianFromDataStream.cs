@@ -30,7 +30,7 @@ public class MedianFinder {
     }
     
     public double FindMedian() {
-        if((low.Count + high.Count) % 2 == 0)
+        if(low.Count == high.Count)
         {
             return (double)(low.Peek() + high.Peek()) / 2;
         }
